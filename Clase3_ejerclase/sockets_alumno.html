@@ -26,6 +26,7 @@
       websocket.onopen    = function(evt) { onOpen(evt)    };
       websocket.onmessage = function(evt) { onMessage(evt) };
       websocket.onerror   = function(evt) { onError(evt) };
+      websocket.onclose   = function(evt) { onClose(evt) };
     }
 
     function onOpen(evt)

@@ -96,6 +96,7 @@
       e.preventDefault();
       socket.disconnect();
     });
+    
     socket.on('chat message', function (msg) { //escucha los datos
       var item = document.createElement('li');
       item.textContent = `${msg.users}: ${msg.messages}`;

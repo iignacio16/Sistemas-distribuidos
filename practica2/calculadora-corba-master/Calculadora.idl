@@ -1,0 +1,15 @@
+/*      Calculadora.idl     */
+module MCalculadora {
+    struct Operadores {
+        double a;
+        double b;
+    };
+    /* Defino las funciones de mi calculadora */
+    interface ICalculadora
+    {
+        double sumar(in Operadores Ops);
+        double restar(in Operadores Ops);
+        double multiplicar(in Operadores Ops);
+        double dividir(in Operadores Ops);
+    };
+};

@@ -7,12 +7,16 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
 
+app.get('/imagen', (req, res)=>{
+    res.sendFile(__dirname + '/imgs/defaultimg.jpeg')
+})
+
 io.on('connection', (socket) => {
     console.log('new connection', socket.id)
 
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', (msg, img) => {
         //escucha los datos enviados
-        io.emit('chat message', msg)
+        io.emit('chat message', msg, img)
     })
 })
 

@@ -58,12 +58,18 @@
     #messages>li:nth-child(odd) {
       background: #efefef;
     }
+
+    #ImagenPerfil {    width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1}
+    #ImagenPerfil + label { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+    #ImagenPerfil + label:hover { background-color: gray;}
   </style>
 </head>
 
 <body>
   <ul id="messages"></ul>
   <form id="form" action="">
+    <input type="file" id="ImagenPerfil" accept="image/*">
+    <label for="ImagenPerfil">Profile Image</label>
     <input type="text" id="users" placeholder="Escriba su usuario:" autocomplete="off" />
     <input type="text" id="input" placeholder="Escriba aqui su mensaje... " autocomplete="off" />
     <button>Send</button>
@@ -79,14 +85,16 @@
     var input = document.getElementById('input');
     var users = document.getElementById('users');
     var closebutton = document.getElementById('closebutton');
+    var imgInput = document.getElementById('ImagenPerfil');
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      var img = imgInput.files[0] ? imgInput.files[0] : "/imagen";
       if (input.value) {
         socket.emit('chat message', { //envia los datos de cliente a servidor
           users: users.value,
           messages: input.value
-        });
+        }, img);
         console.log(users.value, input.value);
         input.value = '';
       }
@@ -97,9 +105,21 @@
       socket.disconnect();
     });
     
-    socket.on('chat message', function (msg) { //escucha los datos
+    socket.on('chat message', function (msg, img) { //escucha los datos
       var item = document.createElement('li');
-      item.textContent = `${msg.users}: ${msg.messages}`;
+      var imgContainer = document.createElement("img");
+      if(typeof img === "string"){
+        imgContainer.src = img;
+      }else{
+        var imgFile = new File([img], img);
+        imgContainer.src = URL.createObjectURL(imgFile);
+      }
+      imgContainer.height = 25;
+      imgContainer.width = 25;
+      item.appendChild(imgContainer);
+      var spanMsg = document.createElement("span");
+      spanMsg.textContent = `${msg.users}: ${msg.messages}`;
+      item.appendChild(spanMsg);
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
